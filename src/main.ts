@@ -1,9 +1,20 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const config = new DocumentBuilder()
+    .setTitle('Blog Pessoal')
+    .setDescription('Projeto Blog Pessoal')
+    .setContact("Generation Brasil","http://www.generationbrasil.online","generation@email.com")
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('/swagger', app, document);
+
 
   process.env.TZ = '-03:00' // Configura o fuso horário da aplicação. Utilizando o comando process.env, definimos a variável de ambiente TZ (Time Zone) com o valor -03:00 (correspondente ao horário de Brasília no padrão UTC - Universal Time Coordinated). Sem essa configuração, o Nest exibirá atributos de data e hora com 3 horas de diferença, pois ele opera no fuso horário padrão UTC 00:00, enquanto o Brasil está em UTC -03:00 em relação a Greenwich. Por exemplo, um horário configurado como 12:00 seria exibido como 15:00.
 
